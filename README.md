@@ -46,6 +46,6 @@ let sheetID = '1_tG0XIS00c2NrB_YourSpreadSheetIDHere'
     sheets.spreadsheets.values.get({
       auth: auth,
       spreadsheetId: sheetID,
-      range: 'data1!A3:D', /// that refers to a group of cells in the spreadsheet
+      range: 'data1!A3:D', /// refers to a group of cells in the spreadsheet
 ```
 
