@@ -21,12 +21,18 @@ A Google Account
 ## Running the Test
 
 *  ```read.js``` is the module file that use expressNode calls when connecting and fetching data from Google SpreadSheet API
+*  ```index.js``` This app starts a server and listens on port 3000 for connections.
+
+```javascript
+node index.js /// to start the web app
+```
 
 ### ```exports.readSheet = function(sheetID, callback) ```
-* ```sheetID``` - the module needs this parameter which is used to identify which spreadsheet is to be accessed or altered.
+* ```sheetID``` - the module needs this parameter which is used to identify which spreadsheet is to be accessed.
 * ```callback``` - This parameter calls a callback function.
 
-## notes before running the test
+
+## Deployment
 
 * change the ```sheetID``` variable in ``index.js`` 
 
