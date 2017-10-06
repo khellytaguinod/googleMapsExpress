@@ -4,7 +4,7 @@ A google map project that visualize the provinces of Philippines fetching data f
 
 ## Prerequisites
 
-[Node.js installed] (https://www.npmjs.com/)
-[Express framework module ] (https://expressjs.com/en/starter/installing.html)
-[Google Credentials] (https://developers.google.com/sheets/api/quickstart/nodejs)
+[Node.js installed](https://www.npmjs.com/)
+[Express framework module ](https://expressjs.com/en/starter/installing.html)
+[Google Credentials](https://developers.google.com/sheets/api/quickstart/nodejs)
 A Google Account
