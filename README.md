@@ -20,8 +20,26 @@ A Google Account
 
 ## Running the Test
 
-*  ```read.js``` is the module file that express calls when connecting and fetching data from Google SpreadSheet API
+*  ```read.js``` is the module file that use expressNode calls when connecting and fetching data from Google SpreadSheet API
 
 ### ```exports.readSheet = function(sheetID, callback) ```
 * ```sheetID``` - the module needs this parameter which is used to identify which spreadsheet is to be accessed or altered.
 * ```callback``` - This parameter calls a callback function.
+
+## notes before running the test
+
+* change the ```sheetID``` variable in ``index.js`` 
+
+```javascript
+let sheetID = '1_tG0XIS00c2NrB_YourSpreadSheetIDHere'
+```
+
+* change the ``` range``` variable in ``read.js`` 
+```javascript
+ let sheets = google.sheets('v4');
+    sheets.spreadsheets.values.get({
+      auth: auth,
+      spreadsheetId: sheetID,
+      range: 'data1!A3:D', /// that refers to a group of cells in the spreadsheet
+```
+
