@@ -22,4 +22,6 @@ A Google Account
 
 *  ```read.js``` is the module file that express calls when connecting and fetching data from Google SpreadSheet API
 
-# ```exports.readSheet = function(sheetID, callback) ```
+### ```exports.readSheet = function(sheetID, callback) ```
+* ```sheetID``` - the module needs this parameter which is used to identify which spreadsheet is to be accessed or altered.
+* ```callback``` - This parameter calls a callback function.
