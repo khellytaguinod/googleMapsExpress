@@ -4,7 +4,7 @@
 <head>
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
   <meta charset="utf-8">
-  <title>Simple Polygon</title>
+  <title>googleSheet Exercise</title>
   <style>
     /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
@@ -29,8 +29,7 @@
   <div id="map"></div>
   <script>
     let proLat = 0,
-      proLong = 0;
-
+      proLong = 0
 
     function initMap() {
       var map = new google.maps.Map(document.getElementById('map'), {
@@ -42,55 +41,101 @@
         mapTypeId: 'roadmap'
       });
 
-      fetch('http://localhost:3000/data.json')
+      fetch('/sheetData')
         .then(response => response.json())
         .then(result => result.map(element => {
+
           let provName = `${element.provinceName}`
           let provPopulation = `${element.population}`
-          let provCoords = JSON.parse(element.coordinates)
-          let proCenterCoords = JSON.parse(element.centerCoords)
-          let posLat = proCenterCoords[1]
-          let posLong = proCenterCoords[0]
 
-          let randomColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
+          return {
+            provName,
+            provPopulation
+          };
 
-          let shape = new google.maps.Polygon({
-            paths: provCoords,
-            strokeColor: `${randomColor}`,
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            fillColor: `${randomColor}`,
-            fillOpacity: 0.35,
-            position: {
-              "lat": posLat,
-              "lng": posLong
-            }
+        })).then((data) => {
+
+          data.map(coords => {
+            let provPopulation = coords.provPopulation
+
+            let name = coords.provName
+            let provname = name.replace(/\s/g, '-').toLowerCase()
+
+            fetchProvinceCoor(provname, provPopulation)
+          })
+        }); // end of fetch
+
+
+      let fetchProvinceCoor = function(province, provPopulation) {
+
+        fetch(`/coords/${province}.json`)
+
+          .then(response => response.json())
+          .then(coordinates => {
+
+            fetchCenterProvinces(province, coordinates, provPopulation)
+          })
+      } // end of fetch
+
+      let fetchCenterProvinces = function(province, coordinates, provPopulation) {
+
+        fetch(`/centerCoords/${province}.json`)
+
+          .then(response => response.json())
+          .then(coordinates1 => {
+            let posLat = coordinates1[1]
+            let posLong = coordinates1[0]
+
+            createShape(province, coordinates, posLat, posLong, provPopulation)
+          })
+      } // end of fetch
+
+      let createShape = function(province, coordinates, posLat, posLong, provPopulation) {
+        // console.log(provPopulation)
+        let randomColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
+
+        let shape = new google.maps.Polygon({
+          paths: coordinates,
+          strokeColor: `${randomColor}`,
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: `${randomColor}`,
+          fillOpacity: 0.35,
+          position: {
+            "lat": posLat,
+            "lng": posLong
+          }
+        });
+
+        let provinceName = province.replace(/-/g, " ").toUpperCase();
+
+        let contentString = `<div id="content">` +
+          `<h3 id="firstHeading">${provinceName}</h3>` +
+          `<p>Population Number: <b>${provPopulation}</b><p>` +
+          `</div>`;
+
+        let infowindow = new google.maps.InfoWindow({
+          content: contentString,
+          maxWidth: 200
+        });
+
+        shape.setMap(map);
+
+        shape.addListener('mouseover', function() {
+          infowindow.setPosition({
+            "lat": proLat,
+            "lng": proLong
           });
+          infowindow.open(map, shape);
+        });
 
-          let contentString = `<div id="content">` +
-            `<h3 id="firstHeading">${provName}</h3>` +
-            `<p>Population Number: <b>${provPopulation}</b><p>` +
-            `</div>`;
+        shape.addListener('mouseout', function() {
+          infowindow.close(map, shape);
+        });
 
-          let infowindow = new google.maps.InfoWindow({
-            content: contentString,
-            maxWidth: 200
-          });
+      }
 
-          shape.setMap(map);
 
-          shape.addListener('mouseover', function() {
-            infowindow.setPosition({
-              "lat": proLat,
-              "lng": proLong
-            });
-            infowindow.open(map, shape);
-          });
-
-          shape.addListener('mouseout', function() {
-            infowindow.close(map, shape);
-          });
-        }));
     }
   </script>
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDl32dSXGt7MYeJnkofk4mARVT4VUF5Poo&callback=initMap">

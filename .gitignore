@@ -57,3 +57,6 @@ typings/
 # dotenv environment variables file
 .env
 
+client_secret.json
+config.js
+sheets.googleapis.com-nodejs-quickstart.json
